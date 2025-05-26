@@ -9,6 +9,17 @@ class ReservationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Réservations')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, '/add-reservation');
+          if (result == true) {
+            // Rafraîchir l'écran après ajout
+            (context as Element).reassemble();
+          }
+        },
+        child: const Icon(Icons.add),
+        tooltip: 'Ajouter une réservation',
+      ),
       body: FutureBuilder<List<Reservation>>(
         future: ReservationService.fetchReservations(),
         builder: (context, snapshot) {

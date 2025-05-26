@@ -15,5 +15,17 @@ class ReservationService {
       throw Exception('Erreur lors du chargement des réservations');
     }
   }
-}
 
+  static Future<bool> addReservation(Reservation reservation) async {
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(reservation.toJson()),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Erreur lors de l\'ajout de la réservation');
+    }
+  }
+}

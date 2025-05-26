@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
+import '../screens/add_reservation_screen.dart';
+import '../screens/reservations_screen.dart';
 
 class ReservationButton extends StatelessWidget {
   const ReservationButton({super.key});
@@ -9,7 +11,10 @@ class ReservationButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         // Navigation vers l'écran de réservation
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddReservationScreen()),
+        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppTheme.primaryColor,
