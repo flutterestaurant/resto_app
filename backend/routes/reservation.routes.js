@@ -9,14 +9,10 @@ const {
   cancelReservation,
   checkAvailability
 } = require('../controllers/reservation.controller');
-const { optionalAuthMiddleware } = require('../middlewares/auth.middleware');
 const { staffAdminMiddleware } = require('../middlewares/role.middleware');
 
 // Routes publiques
 router.get('/availability', checkAvailability);
-
-// Routes avec authentification optionnelle
-router.post('/', optionalAuthMiddleware, createReservation);
 
 // Routes protégées pour tous les utilisateurs (protected by global JWT middleware in server.js)
 router.get('/me', getUserReservations);

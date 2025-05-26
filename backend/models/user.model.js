@@ -1,4 +1,4 @@
-const { db } = require('../server');
+const { db } = require('../config/db');
 const bcrypt = require('bcryptjs');
 
 // Récupérer tous les utilisateurs

@@ -1,4 +1,4 @@
-const { db } = require('../server');
+const { db } = require('../config/db');
 
 // Récupérer toutes les tables
 async function getAllTables() {

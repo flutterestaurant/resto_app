@@ -1,4 +1,4 @@
-const { db } = require('../server');
+const { db } = require('../config/db');
 
 // Récupérer tous les items du menu
 async function getAllMenuItems() {
