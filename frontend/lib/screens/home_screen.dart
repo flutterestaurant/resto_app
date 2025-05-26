@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart'; // Import AuthService
 import '../themes/app_theme.dart';
 import '../widgets/menu_highlights.dart';
-import '../widgets/reservation_button.dart';
 import '../widgets/restaurant_info_card.dart';
 import 'menu_screen.dart';
 import 'reservations_screen.dart';
@@ -22,7 +21,9 @@ class HomeScreen extends StatelessWidget {
             onPressed: () async {
               await AuthService().logout(); // Call logout method
               if (context.mounted) {
-                Navigator.of(context).pushReplacementNamed('/home'); // Navigate to home screen
+                Navigator.of(
+                  context,
+                ).pushReplacementNamed('/home'); // Navigate to home screen
               }
             },
           ),
@@ -32,14 +33,39 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Image d'en-tête
+            // Image d'en-tête avec une belle image
             Container(
               height: 200,
-              color: Colors.grey[300],
-              child: const Center(child: Icon(Icons.restaurant, size: 80, color: Colors.grey)),
-            ),
-
-            // Informations sur le restaurant
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: Image.network('https://www.lyonresto.com/contenu/photo_restaurant/0_photo_automatique_big/la_cocagne/la_cocagne_28-selection.jpg')
+                      .image,
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.3),
+                    BlendMode.darken,
+                  ),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                'Bienvenue au Gourmet Français',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 8,
+                      color: Colors.black54,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ), // Informations sur le restaurant
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: RestaurantInfoCard(),
@@ -50,21 +76,12 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
                 'Nos spécialités',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
 
             // Aperçu du menu
             const MenuHighlights(),
-
-            // Bouton de réservation
-            const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: ReservationButton(),
-            ),
           ],
         ),
       ),
@@ -72,10 +89,7 @@ class HomeScreen extends StatelessWidget {
         selectedItemColor: AppTheme.primaryColor,
         currentIndex: 0,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant_menu),
             label: 'Menu',
@@ -99,7 +113,9 @@ class HomeScreen extends StatelessWidget {
             case 2:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ReservationsScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const ReservationsScreen(),
+                ),
               );
               break;
           }
