@@ -8,12 +8,12 @@ class MenuService {
   static Future<List<MenuItem>> fetchMenuItems() async {
     final response = await http.get(Uri.parse(baseUrl));
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final List items = data['data'];
+      List items = json.decode(response.body);
+
       return items.map((item) => MenuItem.fromJson(item)).toList();
-    } else {
-      throw Exception('Erreur lors du chargement du menu');
+  }
+    else {
+      throw Exception('Failed to load menu items');
     }
   }
 }
-
