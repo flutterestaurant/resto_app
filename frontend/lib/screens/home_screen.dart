@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
+import '../services/auth_service.dart'; // Import AuthService
 import '../themes/app_theme.dart';
-import '../widgets/restaurant_info_card.dart';
 import '../widgets/menu_highlights.dart';
 import '../widgets/reservation_button.dart';
+import '../widgets/restaurant_info_card.dart';
 import 'menu_screen.dart';
 import 'reservations_screen.dart';
 
@@ -16,10 +18,12 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Le Gourmet Français'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              // Navigation vers l'écran de profil ou de connexion
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            icon: const Icon(Icons.logout), // Changed icon to logout
+            onPressed: () async {
+              await AuthService().logout(); // Call logout method
+              if (context.mounted) {
+                Navigator.of(context).pushReplacementNamed('/home'); // Navigate to home screen
+              }
             },
           ),
         ],

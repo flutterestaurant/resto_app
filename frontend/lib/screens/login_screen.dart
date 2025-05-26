@@ -59,6 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/home'); // Go back to home screen
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
