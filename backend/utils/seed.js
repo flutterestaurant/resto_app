@@ -36,15 +36,18 @@ async function seedDatabase() {
 
   // Seed Reservations
   const reservations = [
-    { id: 1, userId: 2, name: 'Client User', email: 'client@example.com', phone: '098-765-4321', date: '2025-06-01', time: '19:00', guests: 2, tableId: 1, status: 'confirmed', specialRequests: 'Window seat', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  ];
+    {
+      id: '1',
+      name: 'John Droe',
+      phone: '123-456-7890',
+      guests: 2,
+      date: '2023-10-01T19:00:00Z',
+      time: '19:00',
+      status: 'confirmed',
+    }];
   db.reservations.push(...reservations);
 
   console.log('Database seeded successfully!');
-  console.log('Current DB State:', db);
 }
 
-seedDatabase().catch(error => {
-  console.error('Failed to seed database:', error);
-  process.exit(1);
-});
+module.exports = { seedDatabase };

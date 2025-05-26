@@ -14,7 +14,7 @@ class Reservation {
     required this.guests,
     required this.date,
     required this.time,
-    this.status = 'pending',
+    this.status = 'confirmed',
   });
 
   factory Reservation.fromJson(Map<String, dynamic> json) {

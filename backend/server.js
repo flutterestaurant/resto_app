@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth.routes');
 const reservationRoutes = require('./routes/reservation.routes');
 const menuRoutes = require('./routes/menu.routes');
 const tableRoutes = require('./routes/table.routes');
+const {seedDatabase} = require("./utils/seed");
 
 // Initialiser l'application Express
 const app = express();
@@ -19,7 +20,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 // JWT Middleware (globally applied for demonstration)
 app.use((req, res, next) => {
@@ -49,13 +50,17 @@ app.use('/api/tables', tableRoutes);
 
 // Route de base
 app.get('/', (req, res) => {
-  res.json({ message: 'Bienvenue sur l\'API du restaurant Le Gourmet Français!' });
+    res.json({message: 'Bienvenue sur l\'API du restaurant Le Gourmet Français!'});
 });
 
 // Lancer le serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Serveur en cours d'exécution sur le port: ${PORT}`);
+    console.log(`Serveur en cours d'exécution sur le port: ${PORT}`);
+    seedDatabase().catch(error => {
+        console.error('Failed to seed database:', error);
+        process.exit(1);
+    });
 });
 
-module.exports = { app, db };
+module.exports = {app, db };

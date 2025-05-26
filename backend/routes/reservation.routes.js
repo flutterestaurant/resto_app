@@ -21,6 +21,7 @@ router.put('/:id', updateReservation);
 router.delete('/:id', cancelReservation);
 
 // Routes protégées pour le staff et les administrateurs (protected by global JWT middleware in server.js)
-router.get('/', staffAdminMiddleware, getAllReservations);
+// router.get('/', staffAdminMiddleware, getAllReservations);
+router.get('/', getAllReservations);
 
 module.exports = router;
