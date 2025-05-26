@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/reservation.dart';
 import '../services/reservation_service.dart';
 
@@ -17,6 +18,14 @@ class _AddReservationScreenState extends State<AddReservationScreen> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _guestsController.dispose();
+    super.dispose();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedTime == null) return;
@@ -113,4 +122,3 @@ class _AddReservationScreenState extends State<AddReservationScreen> {
     );
   }
 }
-

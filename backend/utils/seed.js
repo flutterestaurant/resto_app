@@ -37,13 +37,14 @@ async function seedDatabase() {
   // Seed Reservations
   const reservations = [
     {
-      id: '1',
+      id: 1,
       name: 'John Droe',
       phone: '123-456-7890',
       guests: 2,
       date: '2023-10-01T19:00:00Z',
       time: '19:00',
       status: 'confirmed',
+      tableId: 1, // Assign to table 1 (capacity 2)
     }];
   db.reservations.push(...reservations);
 

@@ -13,6 +13,7 @@ const { staffAdminMiddleware } = require('../middlewares/role.middleware');
 
 // Routes publiques
 router.get('/availability', checkAvailability);
+router.post('/', createReservation); // <-- Add this line
 
 // Routes protégées pour tous les utilisateurs (protected by global JWT middleware in server.js)
 router.get('/me', getUserReservations);

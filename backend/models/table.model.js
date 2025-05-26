@@ -2,6 +2,7 @@ const { db } = require('../config/db');
 
 // Récupérer toutes les tables
 async function getAllTables() {
+  console.log('Fetching all tables. Current db.tables:', db.tables);
   return db.tables;
 }
 
