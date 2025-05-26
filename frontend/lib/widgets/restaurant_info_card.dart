@@ -50,8 +50,10 @@ class RestaurantInfoCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+         Wrap(
+              spacing: 12,
+              runSpacing: 8,
+              alignment: WrapAlignment.spaceEvenly,
               children: [
                 _buildInfoChip(Icons.star, '4.8/5'),
                 _buildInfoChip(Icons.euro, 'Menu à partir de 35€'),
