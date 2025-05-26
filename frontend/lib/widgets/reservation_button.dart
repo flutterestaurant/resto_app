@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../themes/app_theme.dart';
-import '../screens/add_reservation_screen.dart';
-import '../screens/reservations_screen.dart';
+import '../utils/auth_storage.dart'; // Import AuthStorage
 
 class ReservationButton extends StatelessWidget {
   const ReservationButton({super.key});
@@ -9,12 +9,18 @@ class ReservationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // Navigation vers l'écran de réservation
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddReservationScreen()),
-        );
+      onPressed: () async {
+        final token = await AuthStorage.getToken();
+        if (token != null) {
+          // User is authenticated, navigate to reservation screen
+          Navigator.of(context).pushNamed('/add-reservation');
+        } else {
+          // User is not authenticated, redirect to login screen
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please log in to make a reservation.')),
+          );
+          Navigator.of(context).pushNamed('/login');
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppTheme.primaryColor,
@@ -25,9 +31,9 @@ class ReservationButton extends StatelessWidget {
         ),
         elevation: 4,
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Icon(Icons.calendar_today, size: 24),
           SizedBox(width: 12),
           Text(

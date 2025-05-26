@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Resto App',
       theme: AppTheme.lightTheme, // Utilise ton thème personnalisé
-      home: const LoginScreen(), // Set LoginScreen as the initial screen
+      home: const HomeScreen(), // Affiche l'écran d'accueil du resto
       debugShowCheckedModeBanner: false,
       routes: {
         '/add-reservation': (context) => const AddReservationScreen(),

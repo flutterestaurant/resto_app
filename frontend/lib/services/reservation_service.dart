@@ -23,6 +23,9 @@ class ReservationService {
       final data = json.decode(response.body);
       final List items = data['data'] ?? [];
       return items.map((item) => Reservation.fromJson(item)).toList();
+    } else if (response.statusCode == 401) {
+      // Return an empty list or throw a specific exception for 401
+      throw Exception('Unauthorized'); // Indicate authentication required
     } else {
       throw Exception('Erreur lors du chargement des réservations: ${response.statusCode} ${response.body}');
     }
@@ -37,6 +40,8 @@ class ReservationService {
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      throw Exception('Unauthorized'); // Indicate authentication required
     } else {
       throw Exception('Erreur lors de l\'ajout de la réservation: ${response.statusCode} ${response.body}');
     }
