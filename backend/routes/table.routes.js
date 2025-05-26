@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const tableModel = require('../models/table.model');
-const { authMiddleware } = require('../middlewares/auth.middleware');
 const { staffAdminMiddleware, adminMiddleware } = require('../middlewares/role.middleware');
 
-// Obtenir toutes les tables (accessible au personnel et admin)
-router.get('/', authMiddleware, staffAdminMiddleware, async (req, res) => {
+// Obtenir toutes les tables (accessible au personnel et admin, protected by global JWT middleware in server.js)
+router.get('/', staffAdminMiddleware, async (req, res) => {
   try {
     let tables = await tableModel.getAllTables();
     if (req.query.location) {
@@ -33,7 +32,7 @@ router.get('/', authMiddleware, staffAdminMiddleware, async (req, res) => {
 });
 
 // Obtenir une table spécifique par ID (accessible au personnel et admin)
-router.get('/:id', authMiddleware, staffAdminMiddleware, async (req, res) => {
+router.get('/:id', staffAdminMiddleware, async (req, res) => {
   try {
     const table = await tableModel.getTableById(req.params.id);
     if (!table) {
@@ -57,7 +56,7 @@ router.get('/:id', authMiddleware, staffAdminMiddleware, async (req, res) => {
 });
 
 // Ajouter une nouvelle table (admin uniquement)
-router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
+router.post('/', adminMiddleware, async (req, res) => {
   try {
     const { number, capacity, location, isAvailable, description } = req.body;
     // Vérifier si une table avec ce numéro existe déjà
@@ -85,7 +84,7 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 // Mettre à jour une table (personnel et admin)
-router.put('/:id', authMiddleware, staffAdminMiddleware, async (req, res) => {
+router.put('/:id', staffAdminMiddleware, async (req, res) => {
   try {
     const tableId = req.params.id;
     const { number, capacity, location, isAvailable, description } = req.body;
@@ -123,7 +122,7 @@ router.put('/:id', authMiddleware, staffAdminMiddleware, async (req, res) => {
 });
 
 // Supprimer une table (admin uniquement)
-router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+router.delete('/:id', adminMiddleware, async (req, res) => {
   try {
     const tableId = req.params.id;
     const table = await tableModel.getTableById(tableId);

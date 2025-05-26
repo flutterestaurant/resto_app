@@ -1,41 +1,54 @@
-const pool = require('../config/db');
+const { db } = require('../server');
 
 // Récupérer toutes les tables
 async function getAllTables() {
-  const { rows } = await pool.query('SELECT * FROM tables');
-  return rows;
+  return db.tables;
 }
 
 // Récupérer une table par ID
 async function getTableById(id) {
-  const { rows } = await pool.query('SELECT * FROM tables WHERE id = $1', [id]);
-  return rows[0];
+  return db.tables.find(table => table.id === id);
 }
 
 // Créer une nouvelle table
 async function createTable(data) {
   const { number, capacity, location, isAvailable, description } = data;
-  const { rows } = await pool.query(
-    `INSERT INTO tables (number, capacity, location, isAvailable, description)
-     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-    [number, capacity, location, isAvailable, description]
-  );
-  return rows[0];
+  const newTable = {
+    id: db.tables.length > 0 ? Math.max(...db.tables.map(t => t.id)) + 1 : 1,
+    number,
+    capacity,
+    location,
+    isAvailable: isAvailable || true,
+    description: description || '',
+  };
+  db.tables.push(newTable);
+  return newTable;
 }
 
 // Mettre à jour une table
 async function updateTable(id, data) {
-  const { number, capacity, location, isAvailable, description } = data;
-  const { rows } = await pool.query(
-    `UPDATE tables SET number=$1, capacity=$2, location=$3, isAvailable=$4, description=$5 WHERE id=$6 RETURNING *`,
-    [number, capacity, location, isAvailable, description, id]
-  );
-  return rows[0];
+  const tableIndex = db.tables.findIndex(table => table.id === id);
+  if (tableIndex === -1) {
+    return null;
+  }
+  const table = db.tables[tableIndex];
+  const updatedTable = {
+    ...table,
+    number: data.number || table.number,
+    capacity: data.capacity || table.capacity,
+    location: data.location || table.location,
+    isAvailable: data.isAvailable !== undefined ? data.isAvailable : table.isAvailable,
+    description: data.description || table.description,
+  };
+  db.tables[tableIndex] = updatedTable;
+  return updatedTable;
 }
 
 // Supprimer une table
 async function deleteTable(id) {
-  await pool.query('DELETE FROM tables WHERE id = $1', [id]);
+  const initialLength = db.tables.length;
+  db.tables = db.tables.filter(table => table.id !== id);
+  return db.tables.length < initialLength; // Return true if table was deleted
 }
 
 module.exports = {

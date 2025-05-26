@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const { db } = require('../server');
 
 // Récupérer tous les items du menu
 async function getAllMenuItems() {
@@ -78,6 +78,59 @@ async function getAllMenuItems() {
             "imageUrl": "https://assets.afcdn.com/recipe/20181017/82823_w1024h1024c1cx1869cy2492cxt0cyt0cxb3738cyb4984.jpg"
         }]`);
     return rows;
+  return db.menuItems;
+}
+
+// Récupérer un item par ID
+async function getMenuItemById(id) {
+  return db.menuItems.find(item => item.id === id);
+}
+
+// Créer un nouvel item
+async function createMenuItem(data) {
+  const { name, description, price, category, imageUrl, isAvailable, isSpecial, allergens } = data;
+  const newItem = {
+    id: db.menuItems.length > 0 ? Math.max(...db.menuItems.map(item => item.id)) + 1 : 1,
+    name,
+    description,
+    price,
+    category,
+    imageUrl,
+    isAvailable: isAvailable || false,
+    isSpecial: isSpecial || false,
+    allergens: allergens || [],
+  };
+  db.menuItems.push(newItem);
+  return newItem;
+}
+
+// Mettre à jour un item
+async function updateMenuItem(id, data) {
+  const itemIndex = db.menuItems.findIndex(item => item.id === id);
+  if (itemIndex === -1) {
+    return null;
+  }
+  const item = db.menuItems[itemIndex];
+  const updatedItem = {
+    ...item,
+    name: data.name || item.name,
+    description: data.description || item.description,
+    price: data.price || item.price,
+    category: data.category || item.category,
+    imageUrl: data.imageUrl || item.imageUrl,
+    isAvailable: data.isAvailable !== undefined ? data.isAvailable : item.isAvailable,
+    isSpecial: data.isSpecial !== undefined ? data.isSpecial : item.isSpecial,
+    allergens: data.allergens || item.allergens,
+  };
+  db.menuItems[itemIndex] = updatedItem;
+  return updatedItem;
+}
+
+// Supprimer un item
+async function deleteMenuItem(id) {
+  const initialLength = db.menuItems.length;
+  db.menuItems = db.menuItems.filter(item => item.id !== id);
+  return db.menuItems.length < initialLength; // Return true if item was deleted
 }
 
 module.exports = {
