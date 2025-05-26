@@ -2,31 +2,58 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart'; // Import AuthService
 import '../themes/app_theme.dart';
+import '../utils/auth_storage.dart'; // Import AuthStorage
 import '../widgets/menu_highlights.dart';
 import '../widgets/restaurant_info_card.dart';
 import 'menu_screen.dart';
 import 'reservations_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final token = await AuthStorage.getToken();
+    setState(() {
+      _isLoggedIn = token != null;
+    });
+  }
+
+  Future<void> _logout() async {
+    await AuthService().logout();
+    if (mounted) {
+      setState(() {
+        _isLoggedIn = false; // Update state after logout
+      });
+      Navigator.of(context).pushReplacementNamed('/home'); // Navigate to home screen
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Le Gourmet Français'),
+        // Conditionally hide the back button if it's the first route
+        automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout), // Changed icon to logout
-            onPressed: () async {
-              await AuthService().logout(); // Call logout method
-              if (context.mounted) {
-                Navigator.of(
-                  context,
-                ).pushReplacementNamed('/home'); // Navigate to home screen
-              }
-            },
-          ),
+          if (_isLoggedIn) // Show logout button only if logged in
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: _logout,
+            ),
         ],
       ),
       body: SingleChildScrollView(
