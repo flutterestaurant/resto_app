@@ -2,11 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
+const { db } = require('./config/db'); // Import db from config/db.js
 
 // Charger les variables d'environnement
 dotenv.config();
-
-// In-memory database
 
 // Importer les routes
 const authRoutes = require('./routes/auth.routes');
@@ -23,24 +22,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // JWT Middleware (globally applied for demonstration)
-// app.use((req, res, next) => {
-//   if (req.path.startsWith('/api/auth')) {
-//     return next();
-//   }
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/reservations')) {
+    return next();
+  }
 
-//   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-//   if (!token) {
-//     return res.status(401).json({ message: 'No token provided' });
-//   }
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
 
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     req.user = decoded;
-//     next();
-//   } catch (error) {
-//     return res.status(403).json({ message: 'Invalid token' });
-//   }
-// });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Invalid token' });
+  }
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -59,4 +58,4 @@ app.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur le port: ${PORT}`);
 });
 
-module.exports = { app };
+module.exports = { app, db };

@@ -2,8 +2,7 @@ const { db } = require('../config/db');
 
 // Récupérer tous les items du menu
 async function getAllMenuItems() {
-    // const { rows } = await pool.query('SELECT * FROM menu_items');
-    // pour aller plus vite, on va simuler la récupération des données
+    // The user wants to keep this simulated data for now.
     const rows = JSON.parse(`[
         {
             "name": "Salade César",
@@ -78,7 +77,6 @@ async function getAllMenuItems() {
             "imageUrl": "https://assets.afcdn.com/recipe/20181017/82823_w1024h1024c1cx1869cy2492cxt0cyt0cxb3738cyb4984.jpg"
         }]`);
     return rows;
-  return db.menuItems;
 }
 
 // Récupérer un item par ID
@@ -134,5 +132,9 @@ async function deleteMenuItem(id) {
 }
 
 module.exports = {
-    getAllMenuItems,
+  getAllMenuItems,
+  getMenuItemById,
+  createMenuItem,
+  updateMenuItem,
+  deleteMenuItem
 };
